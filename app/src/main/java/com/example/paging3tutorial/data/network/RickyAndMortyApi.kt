@@ -8,7 +8,7 @@ interface RickyAndMortyApi {
     @GET("character/")
     suspend fun getCharacters(
         @Query("page")
-        page: Int
+        page: Int?
     ): RickyAndMortyDto
 
     @GET("character/")

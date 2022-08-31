@@ -7,7 +7,7 @@ import javax.inject.Inject
 class GetCharactersUseCase @Inject constructor(
     private val networkRepository: NetworkRepository
 ) {
-    suspend operator fun invoke(page: Int): RickyAndMortyDto {
+    suspend operator fun invoke(page: Int? = null): RickyAndMortyDto {
         return networkRepository.getCharacters(page)
     }
 }

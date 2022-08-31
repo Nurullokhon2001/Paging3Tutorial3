@@ -1,5 +1,31 @@
 <resources>
     <string name="app_name">Paging3Tutorial</string>
     <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Labels -->
+    <string name="species">Species</string>
+    <string name="gender">Gender</string>
+    <string name="status">Status</string>
+    <string name="location">Location</string>
+    <string name="origin">Origin</string>
+    <string name="about">About</string>
+
+    <!-- Buttons/Options -->
+    <string name="close">fechar</string>
+
+    <!-- Menu -->
+    <string name="search_character">Search Character</string>
+
+    <!-- Image: Content Description -->
+    <string name="character_character_image">Character: Character Image</string>
+    <string name="character_detail_character_image">Character Detail: Character Image</string>
+    <string name="character_detail_origin_icon">Character Detail: Origin Icon</string>
+    <string name="character_detail_species_icon">Character Detail: Species Icon</string>
+    <string name="character_detail_gender_icon">Character Detail: Gender Icon</string>
+    <string name="character_detail_status_icon">Character Detail: Status Icon</string>
+    <string name="character_detail_location_icon">Character Detail: Location Icon</string>
+
+
 </resources>
