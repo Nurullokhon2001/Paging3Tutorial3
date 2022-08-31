@@ -5,6 +5,7 @@ import com.example.paging3tutorial.data.network.RickyAndMortyApi
 import com.example.paging3tutorial.data.network.RickyAndMortyApi.Companion.BASE_URL_API
 import com.example.paging3tutorial.domain.NetworkRepository
 import com.example.paging3tutorial.domain.use_case.GetCharactersUseCase
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,7 +24,7 @@ class NetworkDi {
     @Singleton
     fun provideRickyAndMortyApi(httpLoggingInterceptor: OkHttpClient): RickyAndMortyApi =
         Retrofit.Builder()
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().build()))
             .baseUrl(BASE_URL_API)
             .client(httpLoggingInterceptor)
             .build()
