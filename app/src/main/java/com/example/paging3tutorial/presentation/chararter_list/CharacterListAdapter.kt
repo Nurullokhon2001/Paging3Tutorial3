@@ -23,7 +23,7 @@ class CharacterListAdapter : PagingDataAdapter<ResultDto,CharacterListAdapter.Ch
   }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-        getItem(position)?.let { holder.bindCharacter(it) }
+        holder.bindCharacter(getItem(position)!!)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
@@ -34,9 +34,9 @@ class CharacterListAdapter : PagingDataAdapter<ResultDto,CharacterListAdapter.Ch
 
     class CharacterComparator : DiffUtil.ItemCallback<ResultDto>() {
         override fun areItemsTheSame(oldItem: ResultDto, newItem: ResultDto) =
-            oldItem.id == newItem.id
+            oldItem == newItem
 
         override fun areContentsTheSame(oldItem: ResultDto, newItem: ResultDto) =
-            oldItem == newItem
+            oldItem.id == newItem.id && oldItem.name == oldItem.name
     }
 }

@@ -7,7 +7,7 @@ import com.example.paging3tutorial.domain.use_case.GetCharactersUseCase
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class ExamplePagingSource @Inject constructor(
+class CharacterPagingSource @Inject constructor(
     private val getCharactersUseCase: GetCharactersUseCase
 ) : PagingSource<Int, ResultDto>() {
     override fun getRefreshKey(state: PagingState<Int, ResultDto>): Int? {

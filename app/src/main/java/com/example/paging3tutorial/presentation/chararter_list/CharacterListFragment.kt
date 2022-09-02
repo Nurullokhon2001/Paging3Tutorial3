@@ -20,7 +20,10 @@ class CharacterListFragment : Fragment() {
 
     private var _binding: FragmentCharacterListBinding? = null
     private val binding get() = _binding!!
-    private val characterListAdapter = CharacterListAdapter()
+
+    private val characterListAdapter by lazy(LazyThreadSafetyMode.NONE) {
+        CharacterListAdapter()
+    }
 
     private val characterListViewModel by viewModels<CharacterListViewModel>()
 
@@ -31,15 +34,19 @@ class CharacterListFragment : Fragment() {
         characterListViewModel.getCharactersUseCase()
         _binding = FragmentCharacterListBinding.inflate(layoutInflater)
 
+
         binding.apply {
             rvCharacters.apply {
                 setHasFixedSize(true)
                 layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                adapter = characterListAdapter
+                adapter = characterListAdapter.withLoadStateHeaderAndFooter(
+                    header = CharacterLoaderStateAdapter(),
+                    footer = CharacterLoaderStateAdapter()
+                )
             }
         }
 
-       lifecycleScope.launch {
+        lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 characterListViewModel.flow
                     .collectLatest {
