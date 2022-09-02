@@ -10,7 +10,7 @@ import com.example.paging3tutorial.data.local.entity.RemoteKeys
 interface RemoteKeysDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(remoteKey: List<RemoteKeys>)
+    suspend fun insertRemoteKeys(remoteKey: List<RemoteKeys>)
 
     @Query("SELECT * FROM remote_keys WHERE repoId = :repoId")
     suspend fun remoteKeysRepoId(repoId: Long): RemoteKeys?

@@ -16,7 +16,7 @@ interface ResultEntityDao {
     @Query(
         "SELECT * FROM result_entity"
     )
-    fun reposByName(): PagingSource<Int, ResultEntity>
+    fun getAllData(): PagingSource<Int, ResultEntity>
 
     @Query("DELETE FROM result_entity")
     suspend fun clearRepos()
