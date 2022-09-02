@@ -1,4 +1,4 @@
-package com.example.paging3tutorial.data.network
+package com.example.paging3tutorial.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

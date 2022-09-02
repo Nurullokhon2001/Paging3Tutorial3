@@ -9,7 +9,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.map
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.paging3tutorial.data.network.dto.ResultDto
 import com.example.paging3tutorial.databinding.FragmentCharacterListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -27,11 +30,12 @@ class CharacterListFragment : Fragment() {
 
     private val characterListViewModel by viewModels<CharacterListViewModel>()
 
+    @OptIn(ExperimentalPagingApi::class)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        characterListViewModel.getCharactersUseCase()
+
         _binding = FragmentCharacterListBinding.inflate(layoutInflater)
 
 
@@ -48,7 +52,7 @@ class CharacterListFragment : Fragment() {
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                characterListViewModel.flow
+                characterListViewModel.getCatsFromMediator()
                     .collectLatest {
                         characterListAdapter.submitData(it)
                     }

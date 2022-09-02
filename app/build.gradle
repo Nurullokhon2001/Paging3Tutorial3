@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.paging3tutorial"
@@ -69,5 +69,11 @@ dependencies {
     implementation "androidx.paging:paging-runtime:$paging_version"
 
     implementation 'io.coil-kt:coil:1.4.0'
+
+
+    implementation "androidx.room:room-runtime:2.4.3"
+    kapt "androidx.room:room-compiler:2.4.3"
+    implementation "androidx.room:room-ktx:2.4.3"
+    implementation "androidx.room:room-paging:2.4.3"
 
 }
