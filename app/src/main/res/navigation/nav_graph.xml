@@ -9,11 +9,16 @@
         android:id="@+id/characterDetailsFragment"
         android:name="com.example.paging3tutorial.presentation.chararter_detail.CharacterDetailsFragment"
         android:label="fragment_character_details"
-        tools:layout="@layout/fragment_character_details" />
+        tools:layout="@layout/fragment_character_details" >
+        <argument
+            android:name="character"
+            app:argType="com.example.paging3tutorial.data.local.entity.ResultEntity"
+            app:nullable="false" />
+    </fragment>
     <fragment
         android:id="@+id/characterListFragment"
         android:name="com.example.paging3tutorial.presentation.chararter_list.CharacterListFragment"
-        android:label="fragment_character_list"
+        android:label="Character List"
         tools:layout="@layout/fragment_character_list" >
         <action
             android:id="@+id/action_characterListFragment_to_characterDetailsFragment"

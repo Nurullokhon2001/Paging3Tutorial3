@@ -4,6 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.paging3tutorial.data.network.dto.LocationDto
 import com.example.paging3tutorial.data.network.dto.OriginDto
+import java.io.Serializable
+
 
 @Entity(tableName = "result_entity")
 data class ResultEntity(
@@ -16,4 +18,4 @@ data class ResultEntity(
     val status: String,
     val type: String,
     val url: String
-)
+) : Serializable

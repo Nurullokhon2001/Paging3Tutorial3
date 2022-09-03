@@ -9,11 +9,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.map
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.paging3tutorial.R
+import com.example.paging3tutorial.data.local.entity.ResultEntity
 import com.example.paging3tutorial.data.network.dto.ResultDto
 import com.example.paging3tutorial.databinding.FragmentCharacterListBinding
+import com.example.paging3tutorial.utills.Extensions.sadeNavigate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -25,7 +29,9 @@ class CharacterListFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val characterListAdapter by lazy(LazyThreadSafetyMode.NONE) {
-        CharacterListAdapter()
+        CharacterListAdapter(
+            itemClick = {itemClicked(it)}
+        )
     }
 
     private val characterListViewModel by viewModels<CharacterListViewModel>()
@@ -58,7 +64,14 @@ class CharacterListFragment : Fragment() {
                     }
             }
         }
-
         return binding.root
+    }
+
+    private fun itemClicked(character: ResultEntity) {
+        findNavController().sadeNavigate(
+            CharacterListFragmentDirections.actionCharacterListFragmentToCharacterDetailsFragment(
+                character
+            )
+        )
     }
 }

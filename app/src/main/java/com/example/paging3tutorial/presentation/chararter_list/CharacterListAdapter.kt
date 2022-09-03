@@ -7,21 +7,25 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.paging3tutorial.data.local.entity.ResultEntity
-import com.example.paging3tutorial.data.network.dto.ResultDto
 import com.example.paging3tutorial.databinding.CharacterListItemBinding
 
-class CharacterListAdapter : PagingDataAdapter<ResultEntity,CharacterListAdapter.CharacterViewHolder>(CharacterComparator()) {
+class CharacterListAdapter(
+    val itemClick: (ResultEntity) -> Unit
+) : PagingDataAdapter<ResultEntity, CharacterListAdapter.CharacterViewHolder>(CharacterComparator()) {
 
-  inner  class CharacterViewHolder(private val binding : CharacterListItemBinding):
-      RecyclerView.ViewHolder(binding.root) {
-      fun bindCharacter(character: ResultEntity) {
-          binding.apply {
-              tvCharacterName.text = character.name
-              tvCharacterId.text = character.id.toString()
-              imgvCharacterImage.load(character.image)
-          }
-      }
-  }
+    inner class CharacterViewHolder(private val binding: CharacterListItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bindCharacter(character: ResultEntity) {
+            binding.apply {
+                tvCharacterName.text = character.name
+                tvCharacterId.text = character.id.toString()
+                imgvCharacterImage.load(character.image)
+                imgvCharacterImage.setOnClickListener {
+                    itemClick.invoke(character)
+                }
+            }
+        }
+    }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         getItem(position)?.let { holder.bindCharacter(it) }
