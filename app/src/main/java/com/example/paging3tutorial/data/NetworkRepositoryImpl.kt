@@ -1,9 +1,6 @@
 package com.example.paging3tutorial.data
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import com.example.paging3tutorial.data.network.RickyAndMortyApi
-import com.example.paging3tutorial.data.network.dto.ResultDto
 import com.example.paging3tutorial.data.network.dto.RickyAndMortyDto
 import com.example.paging3tutorial.domain.NetworkRepository
 import javax.inject.Inject

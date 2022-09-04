@@ -12,6 +12,8 @@ import javax.inject.Inject
 @OptIn(ExperimentalPagingApi::class)
 class CharacterRemoteMediator @Inject constructor(
     private val getCharactersUseCase: GetCharactersUseCase,
+    private val getCharactersByNameUseCase: GetCharactersByNameUseCase,
+    private val query: String,
     private val clearRemoteKeysDao: ClearRemoteKeysDao,
     private val clearReposUseCase: ClearReposUseCase,
     private val insertAllUseCase: InsertAllUseCase,
@@ -49,7 +51,8 @@ class CharacterRemoteMediator @Inject constructor(
         }
 
         try {
-            val apiResponse = getCharactersUseCase.invoke(page)
+            val apiResponse = if (query.isEmpty())
+                getCharactersUseCase.invoke(page) else getCharactersByNameUseCase.invoke(page,query)
             val repos = apiResponse.resultDtos
             val endOfPaginationReached = repos.isEmpty()
 

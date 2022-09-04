@@ -1,9 +1,11 @@
 package com.example.paging3tutorial.presentation.chararter_list
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -11,13 +13,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
-import androidx.paging.map
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.paging3tutorial.R
 import com.example.paging3tutorial.data.local.entity.ResultEntity
-import com.example.paging3tutorial.data.network.dto.ResultDto
 import com.example.paging3tutorial.databinding.FragmentCharacterListBinding
 import com.example.paging3tutorial.utills.Extensions.sadeNavigate
+import com.example.paging3tutorial.utills.setOnQueryListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -30,9 +31,10 @@ class CharacterListFragment : Fragment() {
 
     private val characterListAdapter by lazy(LazyThreadSafetyMode.NONE) {
         CharacterListAdapter(
-            itemClick = {itemClicked(it)}
+            itemClick = { itemClicked(it) }
         )
     }
+
 
     private val characterListViewModel by viewModels<CharacterListViewModel>()
 
@@ -41,10 +43,8 @@ class CharacterListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentCharacterListBinding.inflate(layoutInflater)
-
-
+        getCharacters("")
         binding.apply {
             rvCharacters.apply {
                 setHasFixedSize(true)
@@ -56,15 +56,27 @@ class CharacterListFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                characterListViewModel.getCatsFromMediator()
-                    .collectLatest {
-                        characterListAdapter.submitData(it)
-                    }
-            }
-        }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_search, menu)
+                val item = menu.findItem(R.id.searchCharacterMenu)
+                val searchView = item?.actionView as SearchView
+                searchView.queryHint = "Type a character name"
+                searchView.setOnQueryListener() {
+                    getCharacters(it)
+                }
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return false
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun itemClicked(character: ResultEntity) {
@@ -73,5 +85,17 @@ class CharacterListFragment : Fragment() {
                 character
             )
         )
+    }
+
+    @OptIn(ExperimentalPagingApi::class)
+    private fun getCharacters(query: String) {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                characterListViewModel.getCatsFromMediator(query)
+                    .collectLatest {
+                        characterListAdapter.submitData(it)
+                    }
+            }
+        }
     }
 }

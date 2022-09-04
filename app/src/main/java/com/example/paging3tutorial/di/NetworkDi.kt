@@ -4,6 +4,7 @@ import com.example.paging3tutorial.data.NetworkRepositoryImpl
 import com.example.paging3tutorial.data.network.RickyAndMortyApi
 import com.example.paging3tutorial.data.network.RickyAndMortyApi.Companion.BASE_URL_API
 import com.example.paging3tutorial.domain.NetworkRepository
+import com.example.paging3tutorial.domain.use_case.GetCharactersByNameUseCase
 import com.example.paging3tutorial.domain.use_case.GetCharactersUseCase
 import com.squareup.moshi.Moshi
 import dagger.Module
@@ -45,5 +46,9 @@ class NetworkDi {
     @Provides
     fun provideGetCharactersUseCase(networkRepository: NetworkRepository) =
         GetCharactersUseCase(networkRepository)
+
+    @Provides
+    fun provideGetCharactersByNameUseCase(networkRepository: NetworkRepository) =
+        GetCharactersByNameUseCase(networkRepository)
 
 }
