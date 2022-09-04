@@ -1,7 +1,6 @@
 package com.example.paging3tutorial.presentation.chararter_list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
@@ -24,6 +23,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
+@OptIn(ExperimentalPagingApi::class)
 class CharacterListFragment : Fragment() {
 
     private var _binding: FragmentCharacterListBinding? = null
@@ -38,13 +38,12 @@ class CharacterListFragment : Fragment() {
 
     private val characterListViewModel by viewModels<CharacterListViewModel>()
 
-    @OptIn(ExperimentalPagingApi::class)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCharacterListBinding.inflate(layoutInflater)
-        getCharacters("")
+        getCharacters()
         binding.apply {
             rvCharacters.apply {
                 setHasFixedSize(true)
@@ -55,7 +54,7 @@ class CharacterListFragment : Fragment() {
                 )
             }
         }
-
+        setUpSwipeToRefresh()
         return binding.root
     }
 
@@ -68,15 +67,23 @@ class CharacterListFragment : Fragment() {
                 val item = menu.findItem(R.id.searchCharacterMenu)
                 val searchView = item?.actionView as SearchView
                 searchView.queryHint = "Type a character name"
-                searchView.setOnQueryListener() {
-                    getCharacters(it)
-                }
+                searchView.setOnQueryListener(this@CharacterListFragment::getCharacters)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return false
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun setUpSwipeToRefresh() {
+        binding.swpRefreshCharacters.apply {
+            setOnRefreshListener {
+                getCharacters()
+                binding.swpRefreshCharacters.isRefreshing = false
+                binding.rvCharacters.scrollToPosition(0)
+            }
+        }
     }
 
     private fun itemClicked(character: ResultEntity) {
@@ -87,8 +94,7 @@ class CharacterListFragment : Fragment() {
         )
     }
 
-    @OptIn(ExperimentalPagingApi::class)
-    private fun getCharacters(query: String) {
+    private fun getCharacters(query: String = "") {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 characterListViewModel.getCatsFromMediator(query)

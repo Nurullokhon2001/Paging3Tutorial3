@@ -54,6 +54,6 @@ class CharacterListViewModel @Inject constructor(
                 insertRemoteKeysUseCase,
                 remoteKeysRepoIdUseCase,
             ),
-        ).flow.cachedIn(viewModelScope)
+        ).flow
     }
 }
